@@ -3,6 +3,8 @@
         "typeorm",
         "tseslint",
         "testdb",
-        "ormconfig"
+        "ormconfig",
+        "nestjs",
+        "cadvisor"
     ]
 }
