@@ -23,6 +23,6 @@ export class AuthController {
             throw new BadRequestException('Invalid credentials');
         }
 
-        return this.authService.login(loginUserDto);
+        return this.authService.login(user);
     }
 }

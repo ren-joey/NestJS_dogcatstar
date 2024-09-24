@@ -15,6 +15,7 @@ export class AuthService {
 
         if (user && bcrypt.compareSync(password, user.password)) {
             const { password, ...result } = user;
+            // console.log('validateUser', result);
             return result;
         }
 
@@ -22,7 +23,12 @@ export class AuthService {
     }
 
     async login(user: any) {
+        // console.log('login-pre', user);
+
         const payload = { email: user.email, sub: user.id };
+
+        // console.log('login', payload);
+
         return {
             access_token: this.jwtService.sign(payload),
         };
