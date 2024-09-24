@@ -1,5 +1,5 @@
 // src/orders/orders.controller.ts
-import { Body, Controller, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './order.entity';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
@@ -37,5 +37,15 @@ export class OrdersController {
         const user = req.user;
         // console.log(createOrderDto);
         return this.ordersService.update(orderId, updateOrderDto, user);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    async delete(
+        @Param('id') orderId: number,
+        @Request() req
+    ) {
+        const user = req.user;
+        return this.ordersService.delete(orderId, user);
     }
 }
