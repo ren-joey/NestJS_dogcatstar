@@ -7,21 +7,23 @@ export const options = {
 };
 
 export default function () {
-    const loginRes = http.post('http://localhost/api/auth/login', JSON.stringify({
-        username: 'root',
+    const baseUrl = 'http://localhost';
+
+    const loginRes = http.post(baseUrl + '/auth/login', JSON.stringify({
+        email: 'user@gmail.com',
         password: '123456789',
     }), {
         headers: { 'Content-Type': 'application/json' },
     });
 
     const loginSuccess = check(loginRes, {
-        'login successful': (res) => res.status === 200,
-        'token received': (res) => !!res.json('token'),
+        'login successful': (res) => res.status === 201,
+        'token received': (res) => !!res.json('access_token'),
     });
 
-    const token = loginRes.json('token');
+    const token = loginRes.json('access_token');
 
-    const createOrderRes = http.post('http://localhost/api/orders/create', JSON.stringify({
+    const createOrderRes = http.post(baseUrl + '/orders', JSON.stringify({
         name: 'New Product',
         price: 99.99,
     }), {
@@ -33,7 +35,7 @@ export default function () {
 
     const createOrderSuccess = check(createOrderRes, {
         'order created': (res) => res.status === 201,
-        'order id received': (res) => !!res.json('data')._id,
+        'order id received': (res) => !!res.json('id'),
     });
 
     if (!createOrderSuccess) {
@@ -41,11 +43,9 @@ export default function () {
         return;
     }
 
-    const orderId = createOrderRes.json('data')._id;
+    const orderId = createOrderRes.json('id');
 
-    const deleteOrderRes = http.del('http://localhost/api/orders/delete', JSON.stringify({
-        orderId: orderId,
-    }), {
+    const deleteOrderRes = http.del(baseUrl + '/orders/' + orderId, JSON.stringify({}), {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
@@ -56,7 +56,7 @@ export default function () {
         'order deleted': (res) => res.status === 200,
     });
 
-    http.get('http://localhost/api/orders');
+    http.get(baseUrl + '/orders');
 
     sleep(1);
 }
