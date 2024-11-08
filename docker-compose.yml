@@ -3,7 +3,7 @@ version: '3.8'
 services:
   nestjs-web:
     image: node:20
-    container_name: nestjs
+    container_name: nestjs-web
     build:
       dockerfile: Dockerfile
     ports:
@@ -14,7 +14,6 @@ services:
       - nestjs-mariadb
     volumes:
       - ./app:/app
-    command: npm run start:dev
 
   nestjs-nginx:
     image: nginx:latest
